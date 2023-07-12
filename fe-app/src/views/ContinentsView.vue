@@ -6,11 +6,6 @@ import router from '../router'
 
 const store = useContinentStore()
 
-const getAllContinents = computed(() => {
-  console.log('computed')
-  return store.fetchContinents
-})
-
 const continents = computed(() => {
   return store.continents
 })

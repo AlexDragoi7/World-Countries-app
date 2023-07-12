@@ -10,7 +10,7 @@ export default {
       <div class="md:shrink-0">
         <img
           class="h-48 w-full object-fill md:h-full md:w-32"
-          src="https://img.freepik.com/free-vector/illustration-romania-flag_53876-27113.jpg?w=2000&t=st=1688481185~exp=1688481785~hmac=aa72e28accf9f59d48ebc91d4c1eafa6a582571ec7ef8a4d6c7c2b7ab8a6ff98"
+          src="https://cdn.britannica.com/22/1722-004-EAD033D8/Flag-Iran.jpg"
           alt="Modern building architecture"
         />
       </div>
