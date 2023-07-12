@@ -1,5 +1,28 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { computed } from 'vue'
+import { RouterLink, RouterView, useRoute } from 'vue-router'
+
+const route = useRoute()
+console.log(route)
+const currentRoute = computed(() => {
+  return route.name
+})
+
+const continentName = computed(() => {
+  return route.params.continent
+})
+console.log(currentRoute)
+
+const capitalizeFirstLetter = (string) => {
+  const stringWithoutDash = string.replace('-', ' ')
+  const array = stringWithoutDash.split(' ')
+
+  for (var i = 0; i < array.length; i++) {
+    array[i] = array[i].charAt(0).toUpperCase() + array[i].slice(1)
+  }
+  const finalString = array.join(' ')
+  return finalString
+}
 </script>
 
 <template>
@@ -12,12 +35,12 @@ import { RouterLink, RouterView } from 'vue-router'
           to="/"
           >Continents
         </RouterLink>
-        <RouterLink
-          active-class="border-b border-b-2 border-b-blue-400"
-          class="px-6 py-2 text-gray-600"
-          to="/countries"
-          >Countries</RouterLink
+        <p
+          v-if="route.name !== 'continents'"
+          class="px-6 py-2 text-gray-600 border-b border-b-2 border-b-blue-400"
         >
+          {{ capitalizeFirstLetter(continentName) }}
+        </p>
       </nav>
     </div>
   </header>

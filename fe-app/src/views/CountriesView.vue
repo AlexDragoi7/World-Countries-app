@@ -1,19 +1,42 @@
 <script setup>
 import CountryCardComponent from '../components/CountryCardComponent.vue'
+import { computed, onMounted } from 'vue'
+import { useCountriesStore } from '../stores/countries'
 
-const country1 = {
-  continent: 'Europe',
-  name: 'Romania'
-}
+import { useRoute } from 'vue-router'
+
+const store = useCountriesStore()
+const route = useRoute()
+
+const continentId = route.query.id
+
+const getAllCountries = computed(() => {
+  console.log('computed')
+  return store.fetchCountriesByContinent
+})
+
+const countries = computed(() => {
+  return store.countries
+})
+
+onMounted(() => {
+  store.fetchCountriesByContinent(continentId)
+})
 </script>
 
 <template>
-  <div class="countries">
-    <div class="grid md:grid-cols-4 sm:grid-cols-3 xs:grid-cols-1 gap-3">
-      <CountryCardComponent :name="country1.name" :continent="country1.continent" />
-      <CountryCardComponent :name="country1.name" :continent="country1.continent" />
-      <CountryCardComponent :name="country1.name" :continent="country1.continent" />
-      <CountryCardComponent :name="country1.name" :continent="country1.continent" />
+  <div class="countries" v-if="countries.length !== 0">
+    <div
+      class="grid md:grid-cols-4 sm:grid-cols-3 xs:grid-cols-1 gap-2"
+      v-for="country in countries"
+      :key="country.id"
+    >
+      <CountryCardComponent :name="country.country_name" :region="country.region" />
     </div>
+  </div>
+  <div v-else class="empty-state mx-4 grid justify-center">
+    <img src="../assets/Box.png" class="justify-self-center" />
+    <p class="text-center font-medium text-gray-600">No countries found yet</p>
+    <p class="text-center font-light text-gray-500">There are no countries to display here yet.</p>
   </div>
 </template>
