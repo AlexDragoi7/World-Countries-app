@@ -27,7 +27,7 @@ const capitalizeFirstLetter = (string) => {
 
 <template>
   <header>
-    <div class="wrapper p-8">
+    <div v-if="route.name.includes('continents')" class="wrapper p-8">
       <nav class="flex justify-start">
         <RouterLink
           active-class="border-b border-b-2 border-b-blue-400"

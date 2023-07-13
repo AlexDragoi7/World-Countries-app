@@ -28,4 +28,12 @@ const redirectToCountriesPage = (name, id) => {
       :onclick="() => redirectToCountriesPage(continent.continent_name, continent._id)"
     />
   </div>
+  <div
+    v-if="continents && continents.length === 0"
+    class="continents empty-state mx-4 grid justify-center"
+  >
+    <img src="../assets/EmptyState.png" class="justify-self-center" />
+    <p class="text-center font-medium text-gray-600">No continents found.</p>
+    <p class="text-center font-light text-gray-500">There are no continents to display here yet.</p>
+  </div>
 </template>
