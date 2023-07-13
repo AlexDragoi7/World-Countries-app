@@ -28,11 +28,11 @@ const capitalizeFirstLetter = (string) => {
 <template>
   <header>
     <div v-if="route.name.includes('continents')" class="wrapper p-8">
-      <nav class="flex justify-start">
+      <nav class="flex">
         <RouterLink
           active-class="border-b border-b-2 border-b-blue-400"
-          class="mr-4 px-6 py-2 text-gray-600 font-light"
-          to="/"
+          class="mr-4 px-6 py-2 text-gray-600 font-light flex self-start"
+          to="/continents"
           >Continents
         </RouterLink>
         <p
@@ -41,6 +41,7 @@ const capitalizeFirstLetter = (string) => {
         >
           {{ capitalizeFirstLetter(continentName) }}
         </p>
+        <a class="mr-4 px-6 py-2 text-gray-600 font-light flex self-end">Logout</a>
       </nav>
     </div>
   </header>

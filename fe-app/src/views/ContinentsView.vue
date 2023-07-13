@@ -18,7 +18,7 @@ console.log(continents)
 
 const redirectToCountriesPage = (name, id) => {
   const countriesRoute = name.replace(' ', '-').toLowerCase()
-  router.push(`/${countriesRoute}?id=${id}`)
+  router.push(`/continents/${countriesRoute}?id=${id}`)
 }
 </script>
 <template>
