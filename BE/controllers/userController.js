@@ -20,7 +20,7 @@ const createUser = async (req, res) => {
         if(user){
             let token = jwt.sign({id: user.id}, process.env.SECRETKEY, {expiresIn: "2d"})
     
-            res.cookie("token", token, {maxAge: 2 * 24 * 60 * 60, httpOnly: true})
+            res.cookie("token", token, {maxAge: 60 * 10000, httpOnly: true})
             console.log('user', JSON.stringify(user, null, 2));
             console.log(token)
             return res.status(201).json(user);
@@ -50,7 +50,7 @@ async function loginUser (req, res) {
             
 
             res.cookie("token", token,{
-                maxAge: 2 * 24 * 60 * 60,
+                maxAge: 60 * 10000,
                 httpOnly: true, 
             })
             console.log("user", JSON.stringify(user, null, 2))
@@ -104,10 +104,77 @@ async function resetPassword (req, res, next){
     }
 }
 
+async function addCountryToFavorites (req, res) {
+    try{
+
+         var {new_favoriteCountry, email} = req.body
+
+         var data = await new User({
+            favoriteCountries: new_favoriteCountry
+         })
+
+         
+
+         var addFavCountry = await User.updateMany({
+            email: email
+         }, {
+            $push: {
+                favoriteCountries: data.favoriteCountries
+            }
+         })
+
+         console.log(addFavCountry)
+
+         if(addFavCountry.matchedCount != 0){
+             return res.status(201).json({
+                country_id: data.id,
+                favoriteCountries: `Added ${new_favoriteCountry} to favorites`,
+            })
+         }else{
+            return res.status(404).send("User not found")
+         }
+    }catch(err){
+        console.error(err)
+    }
+}
+
+async function removeCountryFromFavorites(req, res){
+    try{
+
+        var {delCountry, email} = req.body
+
+        var data = await new User({
+            favoriteCountries: delCountry
+        })
+
+
+        var removeFavCountry = await User.updateMany({
+            email: email
+        }, {
+            $pullAll: {
+                favoriteCountries: data.favoriteCountries
+            }
+        })
+
+        if (removeFavCountry){
+            return res.status(201).json({
+                country_id: data.id,
+                favoriteCountries: `Country ${delCountry} has been removed from favorites`
+            })
+        }else{
+            return res.status(401).send(Error)
+        }
+    }catch(err){
+        console.error(err)
+    }
+}
+
 const getAllUsers = async (req, res) => {
     try{
         
-        const allUsers = await User.find();
+        const allUsers = await User.find().populate('favoriteCountries', {
+            country_name: 1
+        });
         allUsers ? res.status(200).json(allUsers) : res.status(404).send("Error");
 
     }catch(err){
@@ -117,5 +184,5 @@ const getAllUsers = async (req, res) => {
 
 
 
-module.exports = {createUser, getAllUsers, loginUser, resetPassword};
+module.exports = {createUser, getAllUsers, loginUser, resetPassword, addCountryToFavorites, removeCountryFromFavorites};
 
