@@ -11,8 +11,8 @@ export const useCountriesStore = defineStore('countries', {
   actions: {
     async fetchCountriesByContinent(continentId) {
       try {
-        const data = await axios.get(`http://localhost:3500/countries/${continentId}`)
-        this.countries = data.data
+        const response = await axios.get(`http://localhost:3500/countries/${continentId}`)
+        this.countries = response.data
       } catch (error) {
         console.error(error)
       }

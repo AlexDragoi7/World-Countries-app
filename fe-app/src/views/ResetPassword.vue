@@ -1,4 +1,30 @@
-<script></script>
+<script setup>
+import { computed, watchEffect, ref } from 'vue'
+import BackToLogincomponent from '../components/common/BackToLogincomponent.vue'
+
+import { useAuthStore } from '../stores/auth'
+import { useToast } from 'vue-toast-notification'
+
+const store = useAuthStore()
+const toast = useToast()
+
+const email = ref('')
+const new_password = ref('')
+
+const passwordHasBeenReset = computed(() => {
+  return store.paswordReset
+})
+
+async function resetPassword() {
+  await store.resetPassword(email.value, password.value)
+}
+
+watchEffect(() => {
+  if (passwordHasBeenReset.value) {
+    toast.success('Password successfully reset', { position: 'top-right' })
+  }
+})
+</script>
 <template>
   <section class="reset-password flex justify-center bg-gray-50 dark:bg-gray-900">
     <div class="flex items-center px-6 py-6 lg:py-0">
@@ -19,6 +45,7 @@
                 >Your email</label
               >
               <input
+                v-model="email"
                 type="email"
                 name="email"
                 id="email"
@@ -33,18 +60,23 @@
                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >New password</label
               >
-              <input type="password" name="password" id="password" placeholder="••••••••"
-              class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg
-              focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700
-              dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-              dark:focus:ring-blue-500 dark:focus:border-blue-500" required= />
+              <input
+                v-model="new_password"
+                type="password"
+                name="password"
+                id="password"
+                placeholder="••••••••"
+                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                required
+              />
             </div>
             <button
-              type="submit"
+              @click.prevent="resetPassword"
               class="w-full text-white bg-blue-400 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
             >
               Reset password
             </button>
+            <BackToLogincomponent />
           </form>
         </div>
       </div>

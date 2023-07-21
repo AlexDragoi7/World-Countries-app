@@ -13,8 +13,8 @@ export const useContinentStore = defineStore('continent', {
   actions: {
     async fetchContinents() {
       try {
-        const data = await axios.get('http://localhost:3500/continents')
-        this.continents = data.data
+        const response = await axios.get('http://localhost:3500/continents')
+        this.continents = response.data
       } catch (error) {
         console.error(error)
       }

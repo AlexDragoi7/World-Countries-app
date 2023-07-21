@@ -1,18 +1,19 @@
 <script>
 export default {
-  props: ['name', 'region']
+  props: ['name', 'region', 'flag']
 }
+import { ref } from 'vue'
+const drawer = ref(false)
 </script>
 
 <template>
-  <div class="max-w-md mx-4 bg-white rounded-xl shadow-md overflow-hidden">
-    <div class="md:flex">
+  <div
+    class="w-full lg:h-60 sm:h-72 mx-4 my-4 bg-white hover:bg-gray-100 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-100 duration-300 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 rounded-xl shadow overflow-hidden"
+    @click="drawer = true"
+  >
+    <div>
       <div class="md:shrink-0">
-        <img
-          class="h-48 w-full object-fill md:h-full md:w-32"
-          src="https://cdn.britannica.com/22/1722-004-EAD033D8/Flag-Iran.jpg"
-          alt="Modern building architecture"
-        />
+        <img class="h-48 w-full object-fill sm:h-32" :src="flag" alt="Country flag" />
       </div>
       <div class="p-8">
         <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">
@@ -25,5 +26,8 @@ export default {
         >
       </div>
     </div>
+    <el-drawer v-model="drawer" title="I am the title" :with-header="false">
+      <span>Hi there!</span>
+    </el-drawer>
   </div>
 </template>
