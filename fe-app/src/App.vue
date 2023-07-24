@@ -35,7 +35,10 @@ function logout() {
 
 <template>
   <header>
-    <div v-if="route?.name?.includes('continents')" class="wrapper p-8">
+    <div
+      v-if="route?.name?.includes('continents') || route?.name?.includes('favorite')"
+      class="wrapper p-8"
+    >
       <nav class="flex justify-between">
         <div class="flex">
           <RouterLink
@@ -55,7 +58,7 @@ function logout() {
             <p class="text-gray-600 font-light self-center">My favorites</p>
           </RouterLink>
           <div
-            v-if="route.name !== 'continents'"
+            v-if="route.name !== 'continents' && route.name !== 'favorite-countries'"
             class="px-6 py-2 flex border-b-2 border-b-blue-400"
           >
             <img class="w-8 mr-2" src="./assets/icons/location-selected.png" />
