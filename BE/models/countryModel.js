@@ -14,7 +14,6 @@ const countrySchema = new mongoose.Schema({
         population: String,
         location: String,
         main_attractions: Array,
-        image: String,
     }],
     continentMapping: {type: mongoose.Schema.Types.ObjectId, ref: 'Continent', required: true},
     

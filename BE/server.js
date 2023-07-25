@@ -18,7 +18,7 @@ const server = http.createServer(app);
 app.use(express.json());
 
 app.use(cookieParser());
-app.use(cors({origin: true, credentials: true}))
+app.use(cors({origin: true, credentials: true, exposedHeaders: ["set-cookie"]}))
 
 
 app.use("/users", userRoute);

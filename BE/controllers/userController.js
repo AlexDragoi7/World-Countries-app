@@ -169,6 +169,34 @@ async function removeCountryFromFavorites(req, res){
     }
 }
 
+async function getAuthenticatedUser(req, res) {
+    try{
+
+        var {token} = req.cookies
+        if(!token){
+            return next("Please login to access the data!")
+        }
+
+        var verify = await jwt.verify(token, process.env.SECRETKEY)
+
+        var user = await User.findById(verify.id).populate('favoriteCountries', {
+            country_name: 1,
+            flag: 1,
+            region: 1
+        })
+        if(user){
+            res.status(200).json(user)
+        }else{
+            res.status(404).send("Error")
+        }
+
+    }catch(err){
+        console.error(err)
+    }
+
+}
+
+
 const getAllUsers = async (req, res) => {
     try{
         
@@ -184,5 +212,5 @@ const getAllUsers = async (req, res) => {
 
 
 
-module.exports = {createUser, getAllUsers, loginUser, resetPassword, addCountryToFavorites, removeCountryFromFavorites};
+module.exports = {createUser, getAllUsers, loginUser, resetPassword, addCountryToFavorites, removeCountryFromFavorites, getAuthenticatedUser};
 
