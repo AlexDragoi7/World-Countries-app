@@ -39,7 +39,7 @@ onMounted(() => {
 
 <template>
   <div class="countries" v-if="countries && countries.length !== 0">
-    <div class="grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 xs:grid-cols-1 gap-4">
+    <div class="grid lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-2 xs:grid-cols-1 gap-2">
       <div v-for="country in countries">
         <CountryCardComponent
           :key="country.id"

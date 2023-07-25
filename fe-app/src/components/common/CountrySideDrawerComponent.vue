@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch, watchEffect } from 'vue'
 import { useCountriesStore } from '../../stores/countries'
+import { useUsersStore } from '../../stores/users'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -9,13 +10,30 @@ const props = defineProps({
 })
 
 const store = useCountriesStore()
+const userStore = useUsersStore()
+
 const country = computed(() => {
   return store.country
 })
 
+const isCountryAddedToFavorite = computed(() => {
+  return userStore.countryAddedToFavorite
+})
+
+async function addCountryToFavorite(countryId) {
+  console.log(countryId)
+  const email = 'mimigrasu@gmail.com'
+  await userStore.addCountriesToFavorites(countryId, email)
+}
+
 watchEffect(() => {
   if (props.countryName) {
     store.fecthCountryByName(props.countryName)
+  }
+
+  console.log('isCountryAddedToFavorite', isCountryAddedToFavorite.value)
+  if (isCountryAddedToFavorite.value) {
+    alert('country added to fav')
   }
 })
 </script>
@@ -26,7 +44,83 @@ watchEffect(() => {
     title="I am the title"
     :with-header="false"
     :before-close="handleClose"
+    :lock-scroll="false"
   >
-    <p class="text-left text-lg font-medium text-gray-600">{{ country.country_name }}</p>
+    <div class="border border-gray-200 rounded-lg pb-4 h-auto divide-y divide-slate-200">
+      <img class="rounded-t-lg" :src="country.flag" alt="Country flag" />
+      <div class="flex justify-between content-center px-2">
+        <div class="slef-center">
+          <p class="text-left text-2xl font-medium text-gray-600 mt-4">
+            {{ country.country_name }}
+          </p>
+          <p class="capital-tag text-left text-lg font-light mt-2 mb-4">{{ country.capital }}</p>
+        </div>
+        <div class="self-center">
+          <button
+            @click="addCountryToFavorite(country._id)"
+            class="inline-flex items-center px-3 py-2 mt-4 text-sm font-medium text-center text-blue-500 bg-white rounded-lg border border-blue-500 hover:border-blue-700 hover:bg-blue-50 focus:ring-2 focus:outline-none focus:ring-blue-200"
+          >
+            <img class="w-8" src="../../assets/icons/favorite.png" alt="Add to favorite icon" />
+            Add to favorites
+          </button>
+        </div>
+      </div>
+
+      <div class="px-2 mt-4 mb-4">
+        <p class="text-left text-md font-light text-gray-500 mt-2">
+          <b>Language: </b>{{ country.language }}
+        </p>
+        <p class="text-left text-md font-light text-gray-500 mt-2">
+          <b>Population: </b>{{ country.population }}
+        </p>
+        <p class="text-left text-md font-light text-gray-500 mt-2">
+          <b>Religion: </b>{{ country.religion }}
+        </p>
+      </div>
+      <div class="px-2 mt-2">
+        <div class="flex mt-4">
+          <img class="w-9 mr-3" src="../../assets/icons/attraction.png" alt="Attraction" />
+          <p class="text-left text-xl font-medium text-gray-500 mt-2">Major cities</p>
+        </div>
+
+        <div class="city-card" v-for="city in country.majorCities">
+          <p class="text-left text-md font-light text-gray-500 mt-2">
+            <b>Name: </b> {{ city.city_name }}
+          </p>
+          <p class="text-left text-md font-light text-gray-500 mt-2">
+            <b>Location: </b> {{ city.location }}
+          </p>
+          <p class="text-left text-md font-light text-gray-500 mt-2">
+            <b>Population: </b> {{ city.population }}
+          </p>
+          <p class="text-left text-md font-medium text-gray-500 mt-4">
+            <b>Main attractions: </b>
+          </p>
+          <p
+            class="text-left text-md font-light text-gray-500 mt-2"
+            v-for="(attraction, index) in city.main_attractions"
+          >
+            <b>{{ `${index + 1}. ${attraction}` }} </b>
+          </p>
+        </div>
+      </div>
+    </div>
   </el-drawer>
 </template>
+
+<style>
+.capital-tag {
+  background-color: cornflowerblue;
+  color: white;
+  padding: 3px 23px;
+  width: fit-content;
+  border-radius: 16px;
+}
+.city-card {
+  background-color: rgb(100 148 237 / 18%);
+  padding: 8px;
+  border-radius: 8px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+</style>

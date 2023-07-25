@@ -55,7 +55,7 @@ function logout() {
             to="/my-favorites"
           >
             <img class="w-8 mr-1" src="./assets/icons/favorite-checked.png" />
-            <p class="text-gray-600 font-light self-center">My favorites</p>
+            <p class="text-gray-600 font-light self-center">My favorite countries</p>
           </RouterLink>
           <div
             v-if="route.name !== 'continents' && route.name !== 'favorite-countries'"
