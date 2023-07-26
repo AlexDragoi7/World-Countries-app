@@ -23,7 +23,7 @@ export const useUsersStore = defineStore('users', {
         console.error(error)
       }
     },
-    async addCountriesToFavorites(countryId, email) {
+    async addCountriesToFavorites(countryId) {
       try {
         const response = await axios.post(
           `http://localhost:3500/users/favoritecountries`,
@@ -41,7 +41,7 @@ export const useUsersStore = defineStore('users', {
         console.error(error)
       }
     },
-    async removeCountryFromFavorites(countryId, email) {
+    async removeCountryFromFavorites(countryId) {
       try {
         const response = await axios.post(
           `http://localhost:3500/users/deletefavoritecountries`,
