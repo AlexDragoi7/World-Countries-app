@@ -4,7 +4,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useCountriesStore } from '../stores/countries'
 
 import { useRoute } from 'vue-router'
-import CountrySideDrawerComponent from '../components/common/CountrySideDrawerComponent.vue'
+import CountrySideDrawerComponent from '../components/CountrySideDrawerComponent.vue'
 
 const drawer = ref(false)
 const selectedCountryName = ref('')

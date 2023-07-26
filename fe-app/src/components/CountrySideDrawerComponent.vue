@@ -1,8 +1,8 @@
 <script setup>
-import { computed, onMounted, onUpdated, watchEffect } from 'vue'
-import { useCountriesStore } from '../../stores/countries'
-import { useUsersStore } from '../../stores/users'
-import { useAuthStore } from '../../stores/auth'
+import { computed, onMounted, watchEffect } from 'vue'
+import { useCountriesStore } from '../stores/countries'
+import { useUsersStore } from '../stores/users'
+import { useAuthStore } from '../stores/auth'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -64,13 +64,13 @@ watchEffect(() => {
   <el-drawer
     class="country-side-drawer"
     v-model="props.isOpen"
-    :with-header="false"
+    :with-header="true"
     :before-close="handleClose"
     :lock-scroll="false"
   >
     <div class="border border-gray-200 rounded-lg pb-4 h-auto divide-y divide-slate-200">
       <img class="rounded-t-lg" :src="country.flag" alt="Country flag" />
-      <div class="flex justify-between content-center px-2">
+      <div class="country-info-header px-2">
         <div class="self-center">
           <p class="text-left text-2xl font-medium text-gray-600 mt-4">
             {{ country.country_name }}
@@ -83,7 +83,7 @@ watchEffect(() => {
             @click="addCountryToFavorite(country._id)"
             class="inline-flex items-center px-3 py-2 mt-4 text-sm font-medium text-center text-blue-500 bg-white rounded-lg border border-blue-500 hover:border-blue-700 hover:bg-blue-50 focus:ring-2 focus:outline-none focus:ring-blue-200"
           >
-            <img class="w-8" src="../../assets/icons/favorite.png" alt="Add to favorite icon" />
+            <img class="w-8" src="../assets/icons/favorite.png" alt="Add to favorite icon" />
             Add to favorites
           </button>
           <button
@@ -91,7 +91,7 @@ watchEffect(() => {
             @click="removeCountryFromFavorite(country._id)"
             class="inline-flex items-center px-3 py-2 mt-4 text-sm font-medium text-center text-blue-500 bg-white rounded-lg border border-blue-500 hover:border-blue-700 hover:bg-blue-50 focus:ring-2 focus:outline-none focus:ring-blue-200"
           >
-            <img class="w-8" src="../../assets/icons/favorite.png" alt="Add to favorite icon" />
+            <img class="w-8" src="../assets/icons/favorite.png" alt="Add to favorite icon" />
             Remove from favorites
           </button>
         </div>
@@ -110,7 +110,7 @@ watchEffect(() => {
       </div>
       <div class="px-2 mt-2">
         <div class="flex mt-4">
-          <img class="w-9 mr-3" src="../../assets/icons/attraction.png" alt="Attraction" />
+          <img class="w-9 mr-3" src="../assets/icons/attraction.png" alt="Attraction" />
           <p class="text-left text-xl font-medium text-gray-500 mt-2">Major cities</p>
         </div>
 
@@ -140,6 +140,11 @@ watchEffect(() => {
 </template>
 
 <style>
+.country-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+}
 .capital-tag {
   background-color: cornflowerblue;
   color: white;
@@ -159,6 +164,9 @@ watchEffect(() => {
 @media only screen and (max-width: 768px) {
   .country-side-drawer {
     width: 100% !important;
+  }
+  .country-info-header {
+    display: block;
   }
 }
 
