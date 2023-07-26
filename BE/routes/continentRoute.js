@@ -1,9 +1,9 @@
-const express = require('express');
-const continentController = require('../controllers/continentController');
-const {createContinent, getAllContinents} = continentController;
+var express = require('express');
+var continentController = require('../controllers/continentController');
+var {createContinent, getAllContinents} = continentController;
 
 
-const router = express.Router();
+var router = express.Router();
 
 router.post('/', createContinent);
 router.get("/", getAllContinents);

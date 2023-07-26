@@ -1,17 +1,17 @@
-const mongoose = require('mongoose');
-const schema = require("../models/userModel");
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+var mongoose = require('mongoose');
+var schema = require("../models/userModel");
+var bcrypt = require('bcrypt');
+var jwt = require('jsonwebtoken');
 
 
-const User = mongoose.model('User', schema);
+var User = mongoose.model('User', schema);
 
 
-const createUser = async (req, res) => {
+async function createUser (req, res) {
     try{
-        const {first_name, last_name, email, password, phone_number} = req.body;
+        var {first_name, last_name, email, password, phone_number} = req.body;
 
-        const user = new User({
+        var user = new User({
             first_name, last_name, email, password: await bcrypt.hash(password, 10), phone_number
         })
     
@@ -107,32 +107,47 @@ async function resetPassword (req, res, next){
 async function addCountryToFavorites (req, res) {
     try{
 
-         var {new_favoriteCountry, email} = req.body
+         var {newFavoriteCountry} = req.body
 
          var data = await new User({
-            favoriteCountries: new_favoriteCountry
+            favoriteCountries: newFavoriteCountry
          })
 
-         
+         var {token} = req.cookies
+         if(!token){
+            return ("Error")
+         }
+         var verify = await jwt.verify(token, process.env.SECRETKEY)
+
+         var user = await User.findById(verify.id).populate('favoriteCountries', {
+            country_id: 1
+         })
+
+         var countryHasBeenAlreadyAdded = user.favoriteCountries.find((country) => country.id === newFavoriteCountry) 
+
+         if (countryHasBeenAlreadyAdded){
+            return res.status(404).send("Error")
+         }else{
 
          var addFavCountry = await User.updateMany({
-            email: email
+            _id: verify.id
          }, {
             $push: {
                 favoriteCountries: data.favoriteCountries
             }
          })
 
-         console.log(addFavCountry)
+        //  console.log(addFavCountry)
 
          if(addFavCountry.matchedCount != 0){
              return res.status(201).json({
                 country_id: data.id,
-                favoriteCountries: `Added ${new_favoriteCountry} to favorites`,
+                favoriteCountries: `Added ${newFavoriteCountry} to favorites`,
             })
          }else{
             return res.status(404).send("User not found")
          }
+        }
     }catch(err){
         console.error(err)
     }
@@ -141,10 +156,10 @@ async function addCountryToFavorites (req, res) {
 async function removeCountryFromFavorites(req, res){
     try{
 
-        var {delCountry, email} = req.body
+        var {deletedCountry, email} = req.body
 
         var data = await new User({
-            favoriteCountries: delCountry
+            favoriteCountries: deletedCountry
         })
 
 
@@ -159,7 +174,7 @@ async function removeCountryFromFavorites(req, res){
         if (removeFavCountry){
             return res.status(201).json({
                 country_id: data.id,
-                favoriteCountries: `Country ${delCountry} has been removed from favorites`
+                favoriteCountries: `Country ${deletedCountry} has been removed from favorites`
             })
         }else{
             return res.status(401).send(Error)
@@ -197,10 +212,10 @@ async function getAuthenticatedUser(req, res) {
 }
 
 
-const getAllUsers = async (req, res) => {
+async function getAllUsers (req, res) {
     try{
         
-        const allUsers = await User.find().populate('favoriteCountries', {
+        var allUsers = await User.find().populate('favoriteCountries', {
             country_name: 1
         });
         allUsers ? res.status(200).json(allUsers) : res.status(404).send("Error");

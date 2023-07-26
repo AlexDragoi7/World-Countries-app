@@ -1,19 +1,19 @@
-const http = require('http')
-const express = require('express')
-const userRoute = require("./routes/userRoute")
-const continentRoute = require("./routes/continentRoute");
-const countryRoute = require("./routes/countryRoute")
-const dotenv = require('dotenv').config();
-const mongoose = require('mongoose');
-const mongo = require('./mongo')
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
+var http = require('http')
+var express = require('express')
+var userRoute = require("./routes/userRoute")
+var continentRoute = require("./routes/continentRoute");
+var countryRoute = require("./routes/countryRoute")
+var dotenv = require('dotenv').config();
+var mongoose = require('mongoose');
+var mongo = require('./mongo')
+var cors = require('cors');
+var cookieParser = require('cookie-parser');
 
 
-const PORT = 3500;
-const app = express();
+var PORT = 3500;
+var app = express();
 
-const server = http.createServer(app);
+var server = http.createServer(app);
 
 app.use(express.json());
 

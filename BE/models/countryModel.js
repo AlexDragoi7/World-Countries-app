@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
 
-const countrySchema = new mongoose.Schema({
+var countrySchema = new mongoose.Schema({
     country_name: String,
     region: String,
     population: String,

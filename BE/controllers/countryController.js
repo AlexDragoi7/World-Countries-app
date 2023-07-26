@@ -1,17 +1,17 @@
-const mongoose = require("mongoose")
-const schema = require("../models/countryModel")
+var mongoose = require("mongoose")
+var schema = require("../models/countryModel")
 
 
 
-const Country = mongoose.model("Country", schema);
+var Country = mongoose.model("Country", schema);
 
 
-const createCountry = async (req, res) => {
+async function createCountry (req, res){
     try{
 
-        const {continentMapping, country_name, region, population, capital, flag, majorCities, religion, language} = req.body;
+        var {continentMapping, country_name, region, population, capital, flag, majorCities, religion, language} = req.body;
 
-        const country1 = new Country({
+        var country1 = new Country({
             continentMapping, country_name, region, population, capital, flag, majorCities, religion, language
         })
 
@@ -27,9 +27,9 @@ const createCountry = async (req, res) => {
     }
 }
 
-const getAllCountries = async (req, res) => {
+async function getAllCountries (req, res) {
     try{
-        const allCountries = await Country.find().populate('continentMapping', {
+        var allCountries = await Country.find().populate('continentMapping', {
             continent_name: 1
         });
 
@@ -43,10 +43,10 @@ const getAllCountries = async (req, res) => {
     }
 }
 
-const getCountryByName = async (req, res) => {
+async function getCountryByName (req, res) {
     try{
 
-        const country = await Country.findOne({country_name: req.query.country_name});
+        var country = await Country.findOne({country_name: req.query.country_name});
 
         if(country){
             res.status(200).json(country)
@@ -60,10 +60,10 @@ const getCountryByName = async (req, res) => {
 }
 
 
-const getCountriesByContinent = async (req, res) => {
+async function getCountriesByContinent (req, res) {
     try{
 
-        const country1 = await Country.find({continentMapping: req.params.id});
+        var country1 = await Country.find({continentMapping: req.params.id});
 
         if(country1){
             res.status(200).json(country1);
@@ -76,10 +76,10 @@ const getCountriesByContinent = async (req, res) => {
     }
 }
 
-const getCountryByRegion = async (req, res) => {
+async function getCountryByRegion (req, res)  {
     try{
 
-        const country = await Country.find({region: req.query.region})
+        var country = await Country.find({region: req.query.region})
 
         country ? res.status(200).json(country) : res.status(404).send("Error");
 
