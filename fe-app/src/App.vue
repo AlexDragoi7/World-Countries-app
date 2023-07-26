@@ -6,7 +6,6 @@ import router from './router'
 
 const route = useRoute()
 const authStore = useAuthStore()
-console.log(route)
 const currentRoute = computed(() => {
   return route.name
 })
@@ -14,7 +13,6 @@ const currentRoute = computed(() => {
 const continentName = computed(() => {
   return route.params.name
 })
-console.log(currentRoute)
 
 const capitalizeFirstLetter = (string) => {
   const stringWithoutDash = string?.replace('-', ' ')
@@ -39,29 +37,21 @@ function logout() {
       v-if="route?.name?.includes('continents') || route?.name?.includes('favorite')"
       class="wrapper p-8"
     >
-      <nav class="flex justify-between">
-        <div class="flex">
+      <nav class="nav">
+        <div class="nav-left">
           <RouterLink
             active-class="border-b border-b-2 border-b-blue-400"
             class="mr-4 px-6 py-2 flex self-start"
             to="/continents"
           >
-            <img class="w-8 mr-1" src="./assets/icons/globe.png" />
+            <img class="w-8 mr-1 nav-item-icon" src="./assets/icons/globe.png" />
             <p class="text-gray-600 font-light self-center">Continents</p>
-          </RouterLink>
-          <RouterLink
-            active-class="border-b border-b-2 border-b-blue-400"
-            class="mr-4 px-6 py-2 flex self-start"
-            to="/my-favorites"
-          >
-            <img class="w-8 mr-1" src="./assets/icons/favorite-checked.png" />
-            <p class="text-gray-600 font-light self-center">My favorite countries</p>
           </RouterLink>
           <div
             v-if="route.name !== 'continents' && route.name !== 'favorite-countries'"
             class="px-6 py-2 flex border-b-2 border-b-blue-400"
           >
-            <img class="w-8 mr-2" src="./assets/icons/location-selected.png" />
+            <img class="w-8 mr-2 nav-item-icon" src="./assets/icons/location-selected.png" />
             <p class="text-gray-600 self-center font-light">
               {{ capitalizeFirstLetter(continentName) }}
             </p>
@@ -80,4 +70,26 @@ function logout() {
   <RouterView class="p-8" />
 </template>
 
-<style scoped></style>
+<style scoped>
+.nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav-left {
+  display: flex;
+}
+
+@media only screen and (max-width: 768px) {
+  .nav {
+    display: block;
+  }
+
+  .nav-left {
+    display: block;
+  }
+  .nav-item-icon {
+    display: none;
+  }
+}
+</style>

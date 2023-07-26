@@ -2,10 +2,13 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 
 export const useAuthStore = defineStore('auth', {
-  state: () => ({ authData: [], paswordReset: false }),
+  state: () => ({ authData: [], paswordReset: false, authUser: {} }),
   getters: {
     getAuthData(state) {
       return state.authData
+    },
+    getAuthUser(state) {
+      return state.authUser
     }
   },
   actions: {
@@ -24,6 +27,17 @@ export const useAuthStore = defineStore('auth', {
     async logout() {
       this.authData = null
       localStorage.clear()
+    },
+    async getAuthenticatedUser() {
+      try {
+        const response = await axios.get(`http://localhost:3500/users/user`, {
+          withCredentials: true
+        })
+        console.log(response)
+        this.authUser = response.data
+      } catch (error) {
+        console.error(error)
+      }
     },
     async resetPassword(email, new_password) {
       try {

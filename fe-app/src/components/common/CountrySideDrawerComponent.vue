@@ -1,7 +1,8 @@
 <script setup>
-import { computed, onMounted, ref, watch, watchEffect } from 'vue'
+import { computed, onMounted, onUpdated, watchEffect } from 'vue'
 import { useCountriesStore } from '../../stores/countries'
 import { useUsersStore } from '../../stores/users'
+import { useAuthStore } from '../../stores/auth'
 
 const props = defineProps({
   isOpen: Boolean,
@@ -10,38 +11,68 @@ const props = defineProps({
 })
 
 const store = useCountriesStore()
+const authStore = useAuthStore()
 const userStore = useUsersStore()
+
+const authenticatedUser = computed(() => {
+  return authStore.authUser
+})
 
 const country = computed(() => {
   return store.country
+})
+
+const countryHasBeenAddedToFavorites = computed(() => {
+  return checkIfCountryIsAddedToFavorites()
 })
 
 const isCountryAddedToFavorite = computed(() => {
   return userStore.countryAddedToFavorite
 })
 
+function checkIfCountryIsAddedToFavorites() {
+  let addedToFavorites = authenticatedUser.value.favoriteCountries.find(
+    (item) => item.country_name === country.value.country_name
+  )
+  console.log(addedToFavorites)
+  if (addedToFavorites) {
+    return true
+  } else {
+    return false
+  }
+}
+
 async function addCountryToFavorite(countryId) {
   console.log(countryId)
-  const email = 'mimigrasu@gmail.com'
+  const email = authenticatedUser.value.email
   await userStore.addCountriesToFavorites(countryId, email)
+  props.handleClose()
+  authStore.getAuthenticatedUser()
 }
+
+async function removeCountryFromFavorite(countryId) {
+  console.log('remove country')
+  const email = authenticatedUser.value.email
+  await userStore.removeCountryFromFavorites(countryId, email)
+  props.handleClose()
+  authStore.getAuthenticatedUser()
+}
+
+onMounted(() => {
+  authStore.getAuthenticatedUser()
+})
 
 watchEffect(() => {
   if (props.countryName) {
     store.fecthCountryByName(props.countryName)
-  }
-
-  console.log('isCountryAddedToFavorite', isCountryAddedToFavorite.value)
-  if (isCountryAddedToFavorite.value) {
-    alert('country added to fav')
   }
 })
 </script>
 
 <template>
   <el-drawer
+    class="country-side-drawer"
     v-model="props.isOpen"
-    title="I am the title"
     :with-header="false"
     :before-close="handleClose"
     :lock-scroll="false"
@@ -57,11 +88,20 @@ watchEffect(() => {
         </div>
         <div class="self-center">
           <button
+            v-if="!countryHasBeenAddedToFavorites"
             @click="addCountryToFavorite(country._id)"
             class="inline-flex items-center px-3 py-2 mt-4 text-sm font-medium text-center text-blue-500 bg-white rounded-lg border border-blue-500 hover:border-blue-700 hover:bg-blue-50 focus:ring-2 focus:outline-none focus:ring-blue-200"
           >
             <img class="w-8" src="../../assets/icons/favorite.png" alt="Add to favorite icon" />
             Add to favorites
+          </button>
+          <button
+            v-else
+            @click="removeCountryFromFavorite(country._id)"
+            class="inline-flex items-center px-3 py-2 mt-4 text-sm font-medium text-center text-blue-500 bg-white rounded-lg border border-blue-500 hover:border-blue-700 hover:bg-blue-50 focus:ring-2 focus:outline-none focus:ring-blue-200"
+          >
+            <img class="w-8" src="../../assets/icons/favorite.png" alt="Add to favorite icon" />
+            Remove from favorites
           </button>
         </div>
       </div>
@@ -122,5 +162,19 @@ watchEffect(() => {
   border-radius: 8px;
   margin-top: 16px;
   margin-bottom: 16px;
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (max-width: 768px) {
+  .country-side-drawer {
+    width: 100% !important;
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .country-side-drawer {
+    width: 25% !important;
+  }
 }
 </style>

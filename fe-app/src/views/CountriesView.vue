@@ -17,11 +17,7 @@ const countries = computed(() => {
   return store.countries
 })
 
-console.log(countries)
-
 function openSideDrawer(name) {
-  console.log(name)
-  console.log('openSideDrawer')
   drawer.value = true
   selectedCountryName.value = name
 }

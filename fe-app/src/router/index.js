@@ -4,7 +4,6 @@ import CountriesView from '../views/CountriesView.vue'
 import LoginView from '../views/LoginView.vue'
 import SignupView from '../views/SignupView.vue'
 import ResetPassword from '../views/ResetPassword.vue'
-import FavoriteCountriesView from '../views/FavoriteCountriesView.vue'
 
 import isAuthenticated from '../services/auth'
 
@@ -35,11 +34,6 @@ const router = createRouter({
       path: '/continents/:id/:name',
       name: 'continents-countries',
       component: CountriesView
-    },
-    {
-      path: '/my-favorites',
-      name: 'favorite-countries',
-      component: FavoriteCountriesView
     }
   ]
 })
