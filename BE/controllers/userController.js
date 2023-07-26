@@ -156,15 +156,19 @@ async function addCountryToFavorites (req, res) {
 async function removeCountryFromFavorites(req, res){
     try{
 
-        var {deletedCountry, email} = req.body
+        var {deletedCountry} = req.body
 
         var data = await new User({
             favoriteCountries: deletedCountry
         })
 
+        var {token} = req.cookies
+
+        var verify = jwt.verify(token, process.env.SECRETKEY)
+
 
         var removeFavCountry = await User.updateMany({
-            email: email
+            _id: verify.id
         }, {
             $pullAll: {
                 favoriteCountries: data.favoriteCountries
