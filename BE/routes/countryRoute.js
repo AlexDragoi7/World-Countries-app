@@ -1,8 +1,8 @@
-const express = require('express');
-const countryController = require('../controllers/countryController');
-const {createCountry, getAllCountries, getCountryByName, getCountriesByContinent, getCountryByRegion} = countryController;
+var express = require('express');
+var countryController = require('../controllers/countryController');
+var {createCountry, getAllCountries, getCountryByName, getCountriesByContinent, getCountryByRegion} = countryController;
 
-const router = express.Router();
+var router = express.Router();
 
 router.post("/", createCountry);
 router.get("/", getAllCountries);

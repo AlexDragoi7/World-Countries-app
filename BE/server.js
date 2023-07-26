@@ -1,22 +1,30 @@
-const http = require('http')
-const express = require('express')
-const continentRoute = require("./routes/continentRoute");
-const countryRoute = require("./routes/countryRoute")
-const dotenv = require('dotenv').config();
-const mongoose = require('mongoose');
-const mongo = require('./mongo')
+var http = require('http')
+var express = require('express')
+var userRoute = require("./routes/userRoute")
+var continentRoute = require("./routes/continentRoute");
+var countryRoute = require("./routes/countryRoute")
+var dotenv = require('dotenv').config();
+var mongoose = require('mongoose');
+var mongo = require('./mongo')
+var cors = require('cors');
+var cookieParser = require('cookie-parser');
 
 
-const PORT = 3500;
-const app = express();
+var PORT = 3500;
+var app = express();
 
-const server = http.createServer(app);
+var server = http.createServer(app);
 
 app.use(express.json());
 
+app.use(cookieParser());
+app.use(cors({origin: true, credentials: true, exposedHeaders: ["set-cookie"]}))
 
+
+app.use("/users", userRoute);
 app.use("/continents", continentRoute);
 app.use("/countries", countryRoute);
+
 
 mongo.connectValidation;
 mongo.errorValidation

@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
 
-const countrySchema = new mongoose.Schema({
+var countrySchema = new mongoose.Schema({
     country_name: String,
     region: String,
     population: String,
@@ -14,7 +14,6 @@ const countrySchema = new mongoose.Schema({
         population: String,
         location: String,
         main_attractions: Array,
-        image: String,
     }],
     continentMapping: {type: mongoose.Schema.Types.ObjectId, ref: 'Continent', required: true},
     

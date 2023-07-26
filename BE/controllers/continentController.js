@@ -1,13 +1,13 @@
-const mongoose = require("mongoose");
-const schema = require("../models/continentModel");
+var mongoose = require("mongoose");
+var schema = require("../models/continentModel");
 
-const Continent = mongoose.model('Continent', schema)
+var Continent = mongoose.model('Continent', schema)
 
 
-const createContinent = async (req, res) => {
+async function createContinent (req, res) {
     try{
-        const {continent_name, image} = req.body
-        const continent1 = new Continent({
+        var {continent_name, image} = req.body
+        var continent1 = new Continent({
             continent_name,
             image
         })
@@ -24,9 +24,9 @@ const createContinent = async (req, res) => {
     }      
 }
 
-const getAllContinents = async (req, res) => {
+async function getAllContinents (req, res)  {
     try{
-        const allContinents = await Continent.find();
+        var allContinents = await Continent.find();
 
         if(allContinents){
             res.status(200).json(allContinents)
