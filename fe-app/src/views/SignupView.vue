@@ -30,7 +30,6 @@ async function signup() {
 }
 
 watchEffect(() => {
-  console.log('user', user)
   if (user.value?.email) {
     alert('user created')
     toast.success('User successfully created', { position: 'top-right' })

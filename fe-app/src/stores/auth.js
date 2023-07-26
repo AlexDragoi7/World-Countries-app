@@ -20,7 +20,6 @@ export const useAuthStore = defineStore('auth', {
         localStorage.setItem('accessToken', response.data.accessToken)
         document.cookie = `token=${response.data.accessToken}`
       } catch (error) {
-        console.log(error)
         console.error(error)
       }
     },
@@ -33,7 +32,7 @@ export const useAuthStore = defineStore('auth', {
         const response = await axios.get(`http://localhost:3500/users/user`, {
           withCredentials: true
         })
-        console.log(response)
+
         this.authUser = response.data
       } catch (error) {
         console.error(error)
@@ -45,7 +44,7 @@ export const useAuthStore = defineStore('auth', {
           email,
           new_password
         })
-        console.log(response)
+
         this.paswordReset = true
       } catch (error) {}
     }

@@ -1,10 +1,39 @@
 <script setup>
+import { onMounted, computed } from 'vue'
+import { useAuthStore } from '../stores/auth'
+
 const props = defineProps({
   name: String,
   region: String,
   flag: String,
   openSideDrawer: Function
 })
+
+const authStore = useAuthStore()
+
+const authenticatedUser = computed(() => {
+  return authStore.authUser
+})
+
+onMounted(() => {
+  authStore.getAuthenticatedUser()
+})
+
+const countryHasBeenAddedToFavorites = computed(() => {
+  return checkIfCountryIsAddedToFavorites()
+})
+
+function checkIfCountryIsAddedToFavorites() {
+  let addedToFavorites = authenticatedUser.value?.favoriteCountries?.find(
+    (item) => item.country_name === props.name
+  )
+
+  if (addedToFavorites) {
+    return true
+  } else {
+    return false
+  }
+}
 </script>
 
 <template>
@@ -16,15 +45,25 @@ const props = defineProps({
       <div class="md:shrink-0 h-60">
         <img class="w-full h-full object-fill" :src="flag" alt="Country flag" />
       </div>
-      <div class="p-8">
-        <div class="uppercase tracking-wide text-sm text-blue-500 font-semibold">
-          {{ region }}
+      <div class="flex justify-between p-8">
+        <div>
+          <div class="uppercase tracking-wide text-sm text-blue-500 font-semibold">
+            {{ region }}
+          </div>
+          <a
+            href="#"
+            class="block mt-1 text-lg leading-tight font-medium text-black hover:underline"
+            >{{ name }}</a
+          >
         </div>
-        <a
-          href="#"
-          class="block mt-1 text-lg leading-tight font-medium text-black hover:underline"
-          >{{ name }}</a
-        >
+        <div>
+          <img
+            class="w-8"
+            v-if="countryHasBeenAddedToFavorites"
+            src="../assets/icons/favorite-selected.png"
+            alt="Country added to Favorites"
+          />
+        </div>
       </div>
     </div>
   </div>

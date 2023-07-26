@@ -23,9 +23,8 @@ function reirectToContinents() {
 
 watchEffect(() => {
   let userIsAuthenticated = isAuthenticated()
-  console.log(authData)
+
   if (authData.value?.id && userIsAuthenticated) {
-    console.log('auth done')
     reirectToContinents()
   }
 })

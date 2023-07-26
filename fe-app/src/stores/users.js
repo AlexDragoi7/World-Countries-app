@@ -28,8 +28,7 @@ export const useUsersStore = defineStore('users', {
         const response = await axios.post(
           `http://localhost:3500/users/favoritecountries`,
           {
-            new_favoriteCountry: countryId,
-            email: email
+            newFavoriteCountry: countryId
           },
           {
             withCredentials: true
@@ -38,7 +37,6 @@ export const useUsersStore = defineStore('users', {
         if (response.data.country_id) {
           this.countryAddedToFavorite = true
         }
-        console.log(response)
       } catch (error) {
         console.error(error)
       }
@@ -48,8 +46,7 @@ export const useUsersStore = defineStore('users', {
         const response = await axios.post(
           `http://localhost:3500/users/deletefavoritecountries`,
           {
-            delCountry: countryId,
-            email: email
+            deletedCountry: countryId
           },
           {
             withCredentials: true
@@ -58,7 +55,6 @@ export const useUsersStore = defineStore('users', {
         if (response.data.country_id) {
           this.countryRemovedFromFavorite = true
         }
-        console.log(response)
       } catch (error) {
         console.error(error)
       }

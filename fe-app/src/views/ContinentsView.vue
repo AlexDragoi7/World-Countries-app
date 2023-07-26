@@ -14,8 +14,6 @@ onMounted(() => {
   store.fetchContinents()
 })
 
-console.log(continents)
-
 const redirectToCountriesPage = (name, id) => {
   const countriesRoute = name.replace(' ', '-').toLowerCase()
   router.push(`/continents/${id}/${countriesRoute}`)

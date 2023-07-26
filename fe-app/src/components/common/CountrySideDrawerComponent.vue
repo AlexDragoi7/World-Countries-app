@@ -26,15 +26,10 @@ const countryHasBeenAddedToFavorites = computed(() => {
   return checkIfCountryIsAddedToFavorites()
 })
 
-const isCountryAddedToFavorite = computed(() => {
-  return userStore.countryAddedToFavorite
-})
-
 function checkIfCountryIsAddedToFavorites() {
   let addedToFavorites = authenticatedUser.value.favoriteCountries.find(
     (item) => item.country_name === country.value.country_name
   )
-  console.log(addedToFavorites)
   if (addedToFavorites) {
     return true
   } else {
@@ -43,17 +38,13 @@ function checkIfCountryIsAddedToFavorites() {
 }
 
 async function addCountryToFavorite(countryId) {
-  console.log(countryId)
-  const email = authenticatedUser.value.email
-  await userStore.addCountriesToFavorites(countryId, email)
+  await userStore.addCountriesToFavorites(countryId)
   props.handleClose()
   authStore.getAuthenticatedUser()
 }
 
 async function removeCountryFromFavorite(countryId) {
-  console.log('remove country')
-  const email = authenticatedUser.value.email
-  await userStore.removeCountryFromFavorites(countryId, email)
+  await userStore.removeCountryFromFavorites(countryId)
   props.handleClose()
   authStore.getAuthenticatedUser()
 }
@@ -80,7 +71,7 @@ watchEffect(() => {
     <div class="border border-gray-200 rounded-lg pb-4 h-auto divide-y divide-slate-200">
       <img class="rounded-t-lg" :src="country.flag" alt="Country flag" />
       <div class="flex justify-between content-center px-2">
-        <div class="slef-center">
+        <div class="self-center">
           <p class="text-left text-2xl font-medium text-gray-600 mt-4">
             {{ country.country_name }}
           </p>
